@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "restify": "^11.1.0"
+  }
+}

@@ -1,0 +1,79 @@
+
+body{
+    background-color: #a3c2b4;
+    
+}
+
+#noteInput {
+    width: 99%;
+    height: 50px;
+    border: 2px solid #cccccc;
+    border-radius: 5px;
+    
+    font-size: 1em;
+    text-align: center; 
+}
+
+.mainSection{
+    background-color:blanchedalmond;
+    border: 5px solid green ;
+    border-radius: 25px;
+    padding: 10px;
+    justify-content: center;
+}
+.titleName{
+    font: 100% arial, sans-serif;
+    font-size: 3em;
+    color: green;
+    display: flex;
+    margin-bottom: 5px;
+    justify-content: center;
+}
+.titlePara{
+    font: 100% arial, sans-serif;
+    padding-left: 100px;
+    padding-right: 100px;
+    font-size: 1.3em;
+    color: rgb(0, 58, 0);
+    text-align: center;
+}
+
+.ButtonsSelect{
+    font-size: 1em;
+    display: flex;
+    margin: 5px;
+    justify-content: center;
+    border-radius: 25px;
+    gap: 15px;
+    font-size: 1.2em;
+    padding: 20px;
+}
+
+.noteSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px;
+    border: 5px solid green;
+    border-radius: 25px;
+    background-color: blanchedalmond;
+    padding: 10px;
+}
+#noteContainer {
+    
+    color: rgb(0, 69, 27);
+    padding: 10px;
+    font: 100% arial, sans-serif;
+    font-size: 1.3em;
+    
+}
+
+.videoEmbed{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.goToLink{
+    font-size: 1.3em;
+}
