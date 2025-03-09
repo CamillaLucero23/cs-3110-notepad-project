@@ -1,21 +1,3 @@
-//DEL
-const deleteNote = (noteIndex) => {
-    fetch('/api', {
-        method: 'DELETE',
-        body: JSON.stringify({ noteIndex })
-    })
-    .then(refreshNotes);
-}
-
-
-const editNote = (noteIndex, newNote) => {
-    fetch('/api', {
-        method: 'PUT',
-		body: JSON.stringify({ noteIndex, newNote })
-    })
-    .then(refreshNotes);
-}
-
 //GET
 const refreshNotes = () => {
 	fetch('/api', {method: 'GET'})
@@ -76,18 +58,20 @@ const refreshNotes = () => {
 
 refreshNotes()
 
-//POST
-document.getElementById("saveNoteButton").addEventListener(
-  'click',
-  () => {
-	const note = document.getElementById('noteInput').value
-	fetch('/api', {
-		method: 'POST',
-		body: JSON.stringify({ note })
-    }).then(refreshNotes)
-  }
-)
+//DEL
+const deleteNote = (noteIndex) => {
+    fetch('/api', {
+        method: 'DELETE',
+        body: JSON.stringify({ noteIndex })
+    })
+    .then(refreshNotes);
+}
 
-
-
-
+//PUT
+const editNote = (noteIndex, newNote) => {
+    fetch('/api', {
+        method: 'PUT',
+		body: JSON.stringify({ noteIndex, newNote })
+    })
+    .then(refreshNotes);
+}

@@ -36,6 +36,7 @@ const authenticate = (auth = "") => {
 
 server.post('/api', (req, res, next) => {
 	try {
+		console.log(req.body)
 		const params = JSON.parse(req.body)
 		
         notes.push(params.note)
@@ -47,7 +48,8 @@ server.post('/api', (req, res, next) => {
 })
 
 server.get('/api', (req, res, next) => {
-	
+	//THIS NEEDS TO BE FIXED, THIS WILL BREAK WHEN WE START USING UIDS FOR NOTES
+	//RIGHT NOW IT IS FINE BECAUSE WE ARENT PULLING NOTES OF A SPECIFIC ID
 	//get our requested param...
 	const index = req.query.index
 	
