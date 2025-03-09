@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const restify = require('restify')
-const bodyParser = require('body-parser');
  
 const server = restify.createServer()
 
@@ -29,7 +28,7 @@ fs.readFile('passwrd.db', 'utf8', (err, data) => {
 */
 let notes = []
 
-const authenticate = (auth = "" ) => {
+const authenticate = (auth = "") => {
 
 	const{user, pass} = atob(auth.slice(6)).split(":")
 	return !!user  && !!pass && users[user] == hash(pass)
@@ -38,6 +37,7 @@ const authenticate = (auth = "" ) => {
 server.post('/api', (req, res, next) => {
 	try {
 		const params = JSON.parse(req.body)
+		
         notes.push(params.note)
 		res.send(201, params.note)
 	} catch {
