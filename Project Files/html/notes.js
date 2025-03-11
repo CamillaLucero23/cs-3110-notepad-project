@@ -14,9 +14,7 @@ const refreshNotes = () => {
 			//Define its id
 			noteSection.id = note.indexOf(n);
 
-			//Create a paragraph so we can display our input 
-			const noteParagraph = document.createElement('p');
-			noteParagraph.textContent = n;
+			noteSection.innerHTML = n;
 			
 			// Create the delete button
 			const deleteButton = document.createElement('button');
@@ -36,14 +34,13 @@ const refreshNotes = () => {
 				// Edit the note (you can add more advanced editing functionality here)
 				const newNote = prompt('Edit your note:', n);
 				if (newNote !== null && newNote !== n) {
-					noteParagraph.textContent = newNote;
+					noteSection.innerHTML = newNote;
 				// Send AJAX request to update the note on the server
 				editNote(note.indexOf(n), newNote)}
 			}
         
   
-			//append to our new section
-			noteSection.appendChild(noteParagraph);
+			//append to our buttons
 			noteSection.appendChild(deleteButton);
 			noteSection.appendChild(editButton);
 	

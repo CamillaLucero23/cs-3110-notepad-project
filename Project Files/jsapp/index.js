@@ -36,7 +36,6 @@ const authenticate = (auth = "") => {
 
 server.post('/api', (req, res, next) => {
 	try {
-		console.log(req.body)
 		const params = JSON.parse(req.body)
 		
         notes.push(params.note)

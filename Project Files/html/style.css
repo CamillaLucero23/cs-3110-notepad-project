@@ -6,12 +6,9 @@ body{
 
 #noteInput {
     width: 99%;
-    height: 150px;
-    border: 2px solid #cccccc;
-    border-radius: 5px;
-    
-    font-size: 1em;
-    text-align: center; 
+    height: 250px;
+	background:white;
+
 }
 
 .mainSection{
