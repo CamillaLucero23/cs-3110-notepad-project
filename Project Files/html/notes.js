@@ -19,7 +19,7 @@ const refreshNotes = () => {
 			// Create the delete button
 			const deleteButton = document.createElement('button');
 			deleteButton.textContent = 'Delete';
-			deleteButton.id = n + '_delete'
+			deleteButton.id = note.indexOf(n).toString() + '_delete'
 			 deleteButton.onclick = () => {
 				// Remove the note section
 				noteSection.remove();
@@ -29,7 +29,7 @@ const refreshNotes = () => {
 			// Create the edit button
 			const editButton = document.createElement('button');
 			editButton.textContent = 'Edit';
-			editButton.id = n + '_edit'
+			editButton.id = note.indexOf(n).toString() + '_edit'
 			editButton.onclick = () => {
 				// Edit the note (you can add more advanced editing functionality here)
 				const newNote = prompt('Edit your note:', n);
