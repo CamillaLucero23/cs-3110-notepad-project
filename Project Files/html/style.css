@@ -74,3 +74,20 @@ body{
 .goToLink{
     font-size: 1.3em;
 }
+.quickNoteContainer {
+	display: grid; 
+    grid-template-columns: 12% 68% 20%; /* Creates three equal columns */ 
+    gap: 5px;
+}
+
+.button4 {
+	position:center;
+	background-color: green;
+	text-align: center;
+	color: white;
+	border:none;
+    border-radius:10px;
+    box-shadow: 0px 0px 2px 2px rgb(0,0,0);
+	width: 100px; 
+	height: 25px;
+}
