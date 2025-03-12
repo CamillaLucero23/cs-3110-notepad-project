@@ -3,13 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <link href="style.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
  
-    <title>Note taking tool</title>
+    <title>Inkscribe: Home</title>
 </head>
 <body>
 	<div class="mainSection">
-		<h1>PLACEHOLDER</h1>
+		<h1>Inkscribe</h1>
 		<a href="notepad.html" class="goToLink">Go To Notepad</a>
+		
+		<!--<textarea rows="2" cols="200" style="width:50%;" id="noteInput" placeholder="Enter your note here"></textarea>-->
+
+		<!-- Create the editor container -->
+		<div class="quickNoteContainer">
+			<div id="noteInput"></div>
+			<div>
+				<p></p>
+				<button class="button button4"> Quick Notes </button>
+				<p></p>
+				<button class="button button4"> School </button>
+				<p></p>
+				<button class="button button4"> Work </button>
+				<p></p>
+				<button class="button button4"> Home </button>
+				<p></p>
+				<button class="button button4"> Other </button>
+				<p></p>
+			</div>
+		</div>
+
+
+        <div class="ButtonsSelect">
+            <button id="saveNoteButton">Save to Quick Note</button>
+			<button id="goToNotes" >My Quick Notes</button>
+			<button id="goToNotes" >Share Note</button>
+        </div>
 	</div>
+
+<!-- Include the Quill library -->
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="index.js"></script>
+
 </body>
 </html>
