@@ -1,6 +1,16 @@
 
+:root{
+	--primary_white: #FFFAEC;
+	--secondary_white: #F5ECD5;
+	--shaded-white:#cfc6b0;
+	--teal: #578E7E;
+	--black: #3D3D3D;
+	--almond: blanchedalmond;
+}
+
+
 body{
-    background-color: #a3c2b4;
+    background-color: var(--teal);
     
 }
 
@@ -12,8 +22,8 @@ body{
 }
 
 .mainSection{
-    background-color:blanchedalmond;
-    border: 5px solid green ;
+    background-color:var(--primary_white);
+    border: 5px solid var(--secondary_white) ;
     border-radius: 25px;
     padding: 10px;
     justify-content: center;
@@ -21,7 +31,7 @@ body{
 .titleName{
     font: 100% arial, sans-serif;
     font-size: 3em;
-    color: green;
+    color: var(--black);
     display: flex;
     margin-bottom: 5px;
     justify-content: center;
@@ -51,14 +61,14 @@ body{
     flex-direction: column;
     justify-content: center;
     margin-top: 10px;
-    border: 5px solid green;
+    border: 5px solid var(--secondary_white) ;
     border-radius: 25px;
-    background-color: blanchedalmond;
+    background-color: var(--primary_white);
     padding: 10px;
 }
 #noteContainer {
     
-    color: rgb(0, 69, 27);
+    color: var(--teal);
     padding: 10px;
     font: 100% arial, sans-serif;
     font-size: 1.3em;
@@ -81,24 +91,24 @@ body{
     justify-content: center;
     align-items: center;
     margin-top: 10px;
-    border: 5px solid green;
+    border: 5px solid var(--secondary_white);
     border-radius: 25px;
-    background-color: blanchedalmond;
+    background-color: var(--primary_white);
     padding: 10px;
 }
 
 .inputInfo{
     width: 40%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  color: #333;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	padding: 10px 12px;
+	border: 1px solid var(--secondary_white);
+	border-radius: 4px;
+	font-size: 16px;
+	color: #333;
+	box-sizing: border-box;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-  .quickNoteContainer {
+ .quickNoteContainer {
 	display: grid; 
     grid-template-columns: 12% 68% 20%; /* Creates three equal columns */ 
     gap: 5px;
@@ -106,12 +116,12 @@ body{
 
 .button4 {
 	position:center;
-	background-color: green;
+	background-color: var(--teal);
 	text-align: center;
-	color: white;
-	border:none;
+	color: var(--primary_white);
+	border:1px solid var(--shaded_white);
     border-radius:10px;
-    box-shadow: 0px 0px 2px 2px rgb(0,0,0);
-	width: 100px; 
+    box-shadow: 0px 0px 2px 2px var(--shaded-white);
+	width: 200px; 
 	height: 25px;
 }
