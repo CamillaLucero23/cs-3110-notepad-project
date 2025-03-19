@@ -3,6 +3,7 @@
 const restify = require('restify');
 const path = require('path');
 const fs = require('node:fs');
+const sqLite3 = require('sqlite3');
 const { createHmac } = require('node:crypto');
 console.log('path module loaded:', path);
 
@@ -26,11 +27,25 @@ server.opts('*', (req, res, next) => {
   return next();
 });
 
-
 const secret = "abcdefg"; // Secret key for hashing passwords.
 const hash = (str) => createHmac("sha256", secret).update(str).digest('hex');
 
+
 let users = {};
+const usersdb = new sqLite3.Database('users.sqlite3');
+/*
+usersdb.run(`CREATE TABLE users(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username VARCHAR(256),
+	password VARCHAR(256),
+	email VARCHAR(255),  
+	first VARCHAR(255), 
+	last VARCHAR(255), 
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`);
+*/
+
 try {
   const data = fs.readFileSync('passwrd.db', 'utf8');
   users = JSON.parse(data);
@@ -41,6 +56,16 @@ try {
 }
 
 let notes = [];
+const notesdb = new sqLite3.Database('notes.sqlite3');
+/*
+notesdb.run(`CREATE TABLE notes(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	title VARCHAR(128),
+	note VARCHAR(1048),
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`);
+*/
 
 const authenticate = (req) => {
   const authHeader = req.headers.authorization;
