@@ -1,6 +1,14 @@
 //GET
 const refreshNotes = () => {
-	fetch('/api', {method: 'GET'})
+	const authHeader = sessionStorage.getItem("authHeader")
+	console.log("Auth header from sessionStorage: ", authHeader)
+
+	fetch('/api', {
+		method: 'GET',
+		headers: {
+			"Authorization": authHeader
+		}
+	})
 	.then(body => body.json())
 	.then(note => {
 		
@@ -46,9 +54,7 @@ const refreshNotes = () => {
 	
 			//Append our section to section in our document
 			notesContainer.appendChild(noteSection);
-	
-			/*//Show our button
-			document.getElementById('deleteNote').style.display = "block";*/
+
 		})
 	})
 }
@@ -57,18 +63,34 @@ refreshNotes()
 
 //DEL
 const deleteNote = (noteIndex) => {
-    fetch('/api', {
-        method: 'DELETE',
-        body: JSON.stringify({ noteIndex })
-    })
-    .then(refreshNotes);
-}
-
+	const authHeader = sessionStorage.getItem("authHeader");
+	console.log("Auth header from sessionStorage:", authHeader);
+	fetch(`/api?noteIndex=${noteIndex}`, {
+	  method: 'DELETE',
+	  headers: {
+		"Authorization": authHeader,
+	  }
+	})
+	.then(refreshNotes)
+	.catch(error => console.error('Error deleting note:', error));
+  }
+  
 //PUT
 const editNote = (noteIndex, newNote) => {
-    fetch('/api', {
+	const authHeader = sessionStorage.getItem("authHeader");
+	console.log("Auth header from sessionStorage:", authHeader);
+	
+    fetch(`/api?noteIndex=${noteIndex}`, {
         method: 'PUT',
-		body: JSON.stringify({ noteIndex, newNote })
-    })
-    .then(refreshNotes);
+		headers: {
+		"Authorization": authHeader,
+		"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ noteIndex, newNote }),
+		
+    }
+	
+	)
+    .then(refreshNotes)
+	.catch(error => console.error('Error edititng note:', error))
 }

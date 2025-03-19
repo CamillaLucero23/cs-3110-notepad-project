@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html  lang="en">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link href="style.css" rel="stylesheet">
-    <script type="text/javascript" src="validation.js" defer></script>
-
-    <title>Note taking tool - login</title>
+  <meta charset="UTF-8">
+  <link href="style.css" rel="stylesheet">
+  <script type="text/javascript" src="login.js" defer></script>
+  <title>Note Taking Tool - Login</title>
 </head>
 <body>
-	<div class="mainSection">
-		<h1>Login</h1>
+  <div class="mainSection">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <p>Welcome back! Please login to your account.</p>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <br><br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br><br>
+      <button class="button button4" type="submit">Login</button>
+      <p>I HATE THIS!</p>
+    </form>
+    <br>
+    <p>Don't have an account? <a href="register.html">Register here</a></p>
+    <p>Forgot your password? <a href="reset_password.html">Reset it here</a></p>
+    <button class="button button4" type="button" onclick="location.href='index.html'">Back to Home</button>
+    <button class="button button4" id="logoutButton">Log Out</button>
 
-        <div class="loginForm">
-            <p>Welcome back! Please login to your account.</p>
-            <label class="titlePara" for="username">Username:</label>
-            <input class="inputInfo"type="text" id="username" name="username" required>
-            <br><br>
-            <label class="titlePara" for="password">Password:</label>
-            <input class="inputInfo" type="password" id="password" name="password" required>
-            <br><br>
-            <button type="submit" onclick="location.href='notepad.html'">Login</button>
-            <br><br>
-            <p>Don't have an account? <a href="register.html">Register here</a></p>
-            <p>Forgot your password? <a href="reset_password.html">Reset it here</a></p>
-            <button type="button" onclick="location.href='index.html'">Back to Home</button>
-        </div>
-	</div>
-    
+  </div>
 </body>
 </html>
