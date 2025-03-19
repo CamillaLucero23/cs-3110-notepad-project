@@ -57,7 +57,7 @@ try {
 
 let notes = [];
 const notesdb = new sqLite3.Database('notes.sqlite3');
-
+/*
 notesdb.run(`CREATE TABLE notes(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user REFERENCES users(id),
@@ -66,7 +66,7 @@ notesdb.run(`CREATE TABLE notes(
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 `);
-
+*/
 
 const authenticate = (req) => {
   const authHeader = req.headers.authorization;

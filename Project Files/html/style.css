@@ -2,8 +2,9 @@
 :root{
 	--primary_white: #FFFAEC;
 	--secondary_white: #F5ECD5;
-	--shaded-white:#cfc6b0;
+	--shaded_white:#cfc6b0;
 	--teal: #578E7E;
+	--shaded_teal: #456e62;
 	--black: #3D3D3D;
 }
 
@@ -42,9 +43,13 @@ body{
 }
 
 .navbar ul li a:hover {
-    background-color: var(--shaded-white);
+    background-color: var(--shaded_white);
 }
 
+.auth-buttons {
+    float: right;
+	
+}
 
 #noteInput {
     width: 99%;
@@ -155,7 +160,12 @@ body{
 	color: var(--primary_white);
 	border:1px solid var(--shaded_white);
     border-radius:10px;
-    box-shadow: 0px 0px 2px 2px var(--shaded-white);
+    box-shadow: 0px 0px 2px 2px var(--shaded_white);
 	width: 200px; 
 	height: 25px;
+}
+
+.button4:hover{
+	background-color: var(--shaded_teal);
+	color: var(--shaded_white);
 }
