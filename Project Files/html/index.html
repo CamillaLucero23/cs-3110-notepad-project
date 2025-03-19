@@ -9,10 +9,23 @@
     <title>Inkscribe: Home</title>
 </head>
 <body>
-	<div class="mainSection">
-		<h1>Inkscribe</h1>
-		<a href="notepad.html" class="goToLink">Go To Notepad</a>
+
+    <!-- Navigation bar -->
+    <nav class="navbar">
 		
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="notepad.html">Notepad</a></li>
+			<li><a href="tips.html">Tips</a></li>
+            
+        </ul>
+    </nav>
+	<p></p>
+	<div class="mainSection">
+		<div class="titleName"> <u>InkScribe NotePad</u></div>
+        <p class="titlePara">
+            Welcome to InkScribe, the best place to make all your notes and ToDo lists!
+        </p>
 		<!--<textarea rows="2" cols="200" style="width:50%;" id="noteInput" placeholder="Enter your note here"></textarea>-->
 
 		<!-- Create the editor container -->
@@ -39,6 +52,9 @@
 			<button class="button button4" id="goToNotes" >Quick Notes</button>
 			<button class="button button4" id="goToNotes" >Share Note</button>
         </div>
+		
+		<button class="button button4" id="loginButton">Login</button>
+		<button class="button button4" id="registerButton">Register</button>
 	</div>
 
 <!-- Include the Quill library -->

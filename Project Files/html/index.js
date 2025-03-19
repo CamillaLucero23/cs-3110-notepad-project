@@ -12,9 +12,13 @@ document.getElementById("saveNoteButton").addEventListener(
 	console.log(note)
 	console.log(noteLength)
 	console.log(JSON.stringify({note}))
-	
+	const authHeader = sessionStorage.getItem("authHeader")
 	fetch('/api', {
 		method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': authHeader
+    },
 		body: JSON.stringify({ note })
 		
     })
@@ -24,3 +28,9 @@ document.getElementById("saveNoteButton").addEventListener(
 document.getElementById("goToNotes").onclick = function () {
         location.href = "/notes.html";
     };
+document.getElementById("loginButton").onclick = function () {
+        location.href = "/login.html";
+    }
+document.getElementById("registerButton").onclick = function () {
+        location.href = "/register.html";
+    }

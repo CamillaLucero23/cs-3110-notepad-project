@@ -1,39 +1,53 @@
 <!DOCTYPE html>
-<html  lang="en">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link href="style.css" rel="stylesheet">
- 
-    <title>Note taking tool - login</title>
+  <meta charset="UTF-8">
+  <link href="style.css" rel="stylesheet">
+  <script type="text/javascript" src="register.js" defer></script>
+  <title>Register New User</title>
 </head>
 <body>
+  <div class="mainSection">
+	<!-- Navigation bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="notepad.html">Notepad</a></li>
+			<li><a href="tips.html">Tips</a></li>
+            
+        </ul>
+    </nav>
+	<p></p>
+    <h1>Create a New Account</h1>
+    <div id="adminInfo"></div>
+    
     <form id="registerForm">
-	<div class="mainSection">
-		<h1>Account Regester!</h1>
-        <p>Welcome to the note taking tool! Please register to create an account.</p>
-        <label for="First Name">First Name:</label>
-        <input type="text" id="First Name" name="First Name" required>
-        <br><br>
-        <label for="Last Name">Last Name:</label>
-        <input type="text" id="Last Name" name="Last Name" required>
-        <br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <br><br>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br><br>
-        <label for="confirm_password">Confirm Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required>
-        <br><br>
-        <button type="submit" onclick="location.href='notepad.html'">Register</button>
-        <br><br>
-        <p>Already have an account? <a href="login.html">Login here</a></p>
+      <!-- New user details -->
+      <h2>New User Details</h2>
+      <label for="newUsername">New Username:</label>
+      <input type="text" id="newUsername" name="newUsername" required>
+      <br><br>
+      <label for="newPassword">New Password:</label>
+      <input type="password" id="newPassword" name="newPassword" required>
+      <br><br>
+      <label for="role">Role:</label>
+      <select id="role" name="role">
+         <option value="author">Author</option>
+         <option value="admin">Admin</option>
+      </select>
+      <br><br>
+      <label for="comments">Comments:</label>
+      <textarea id="comments" name="comments"></textarea>
+      <br><br>
+      <button class="button button4" type="submit">Register New User</button>
+    </form>
+    <br>
+    <button class="button button4" type="button" onclick="location.href='login.html'">Back to Login</button>
+    <br><br>
 
-	</div>
-</form>
+<h2>Registered Users</h2>
+<div id="usersList"></div>
+
+  </div>
 </body>
 </html>
