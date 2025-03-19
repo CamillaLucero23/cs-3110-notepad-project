@@ -96,7 +96,6 @@ server.post('/api', (req, res, next) => {
 });
 
   
-
 // GET 
 // - Retrieve notes.
 server.get('/api', (req, res, next) => {
