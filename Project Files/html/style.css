@@ -16,39 +16,36 @@ body{
 }
 
 .navbar {
+	
     background-color:var(--primary_white);
     border: 5px solid var(--secondary_white);
     border-radius: 25px;
     overflow: hidden;
+	
 }
 
 .navbar ul {
-    list-style-type: none;
-    margin: 0;
+   list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
 }
 
-.navbar ul li {
-    margin: 0;
-    padding: 0;
+.navbar li {
+    padding: 10px;
 }
 
-.navbar ul li a {
-    display: block;
+
+.navbar li a {
+
     color: var(--black);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
-.navbar ul li a:hover {
+.navbar li a:hover {
     background-color: var(--shaded_white);
-}
-
-.auth-buttons {
-    float: right;
-	
 }
 
 #noteInput {
@@ -56,6 +53,13 @@ body{
     height: 250px;
 	background:white;
 
+}
+
+#noteTitle {
+	font-size:40pxpx;
+	width: 50%;
+	max-height: 50px;
+	resize: none;
 }
 
 .mainSection{
@@ -105,14 +109,18 @@ body{
     background-color: var(--primary_white);
     padding: 10px;
 }
+
 #noteContainer {
     
-    color: var(--teal);
+    color: var(--black);
     padding: 10px;
     font: 100% arial, sans-serif;
     font-size: 1.3em;
     
 }
+
+#noteContainer 
+
 
 .videoEmbed{
     display: flex;

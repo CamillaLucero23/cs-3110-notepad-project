@@ -9,42 +9,49 @@ const refreshNotes = () => {
 			"Authorization": authHeader
 		}
 	})
-	.then(body => body.json())
+	.then(body =>body.json())
 	.then(note => {
 		
 		const notesContainer = document.getElementById('noteContainer');
-		notesContainer.innerHTML = ''; // Clear any existing notes
-		
+		notesContainer.innerHTML = "" // make sure the html block is clear
 		note.forEach((n) => {
 			
 			//Create a section for our note
 			const noteSection = document.createElement('div');
 			//Define its id
-			noteSection.id = note.indexOf(n);
-
-			noteSection.innerHTML = n;
+			noteSection.id = n.id;
+			noteSection.innerHTML=`
+				<h3>${n.title}</h3>
+				<p><strong>Created:</strong> ${n.created}</p>
+				<p>${n.note}</p>
+			`
 			
 			// Create the delete button
 			const deleteButton = document.createElement('button');
 			deleteButton.textContent = 'Delete';
-			deleteButton.id = note.indexOf(n).toString() + '_delete'
+			deleteButton.id = n.id.toString() + '_delete'
 			 deleteButton.onclick = () => {
 				// Remove the note section
 				noteSection.remove();
 				// Send AJAX request to delete the note from the server
-				deleteNote(note.indexOf(n))}
+				deleteNote(n.id)}
 			
 			// Create the edit button
 			const editButton = document.createElement('button');
 			editButton.textContent = 'Edit';
-			editButton.id = note.indexOf(n).toString() + '_edit'
+			editButton.id = n.id.toString() + '_edit'
 			editButton.onclick = () => {
 				// Edit the note (you can add more advanced editing functionality here)
-				const newNote = prompt('Edit your note:', n);
+				const newTitle = prompt('Edit Title:', n.title);
+				const newNote = prompt('Edit your note:', n.note);
 				if (newNote !== null && newNote !== n) {
-					noteSection.innerHTML = newNote;
+					noteSection.innerHTML =`
+						<h3>${n.title}</h3>
+						<p><strong>Created:</strong> ${n.created}</p>
+						<p>${n.note}</p>
+					`
 				// Send AJAX request to update the note on the server
-				editNote(note.indexOf(n), newNote)}
+				editNote(n.id, newTitle, newNote)}
 			}
         
   
@@ -76,7 +83,7 @@ const deleteNote = (noteIndex) => {
   }
   
 //PUT
-const editNote = (noteIndex, newNote) => {
+const editNote = (noteIndex, newTitle, newNote) => {
 	const authHeader = sessionStorage.getItem("authHeader");
 	console.log("Auth header from sessionStorage:", authHeader);
 	
@@ -86,7 +93,7 @@ const editNote = (noteIndex, newNote) => {
 		"Authorization": authHeader,
 		"Content-Type": "application/json"
 		},
-		body: JSON.stringify({ noteIndex, newNote }),
+		body: JSON.stringify({ noteIndex, newTitle, newNote }),
 		
     }
 	
