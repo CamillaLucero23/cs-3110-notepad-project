@@ -32,7 +32,7 @@ const hash = (str) => createHmac("sha256", secret).update(str).digest('hex');
 
 
 let users = {};
-const usersdb = new sqLite3.Database('users.sqlite');
+const usersdb = new sqLite3.Database('users.sqlite3');
 /*
 usersdb.run(`CREATE TABLE users(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,7 +56,7 @@ try {
 }
 
 //let notes = [];
-const notesdb = new sqLite3.Database('notes.sqlite');
+const notesdb = new sqLite3.Database('notes.sqlite3');
 
 notesdb.run(`CREATE TABLE IF NOT EXISTS notes(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
