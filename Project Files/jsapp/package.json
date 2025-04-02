@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "body-parser": "^1.20.3",
-    "restify": "^11.1.0"
+    "restify": "^11.1.0",
+    "sqlite3": "^5.1.7"
   }
 }

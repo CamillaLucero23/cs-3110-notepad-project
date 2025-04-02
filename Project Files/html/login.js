@@ -21,6 +21,7 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
         console.log("Response status:", response.status);
       if (response.ok) {
         const data = await response.json();
+		console.log(data)
         sessionStorage.setItem("username", data.username);
         sessionStorage.setItem("role", data.role);
         sessionStorage.setItem("authHeader", authHeader);

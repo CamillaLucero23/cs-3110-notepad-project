@@ -3,6 +3,7 @@
 const restify = require('restify');
 const path = require('path');
 const fs = require('node:fs');
+const sqLite3 = require('sqlite3');
 const { createHmac } = require('node:crypto');
 console.log('path module loaded:', path);
 
@@ -26,11 +27,25 @@ server.opts('*', (req, res, next) => {
   return next();
 });
 
-
 const secret = "abcdefg"; // Secret key for hashing passwords.
 const hash = (str) => createHmac("sha256", secret).update(str).digest('hex');
 
+
 let users = {};
+const usersdb = new sqLite3.Database('users.sqlite');
+/*
+usersdb.run(`CREATE TABLE users(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username VARCHAR(256),
+	password VARCHAR(256),
+	email VARCHAR(255),  
+	first VARCHAR(255), 
+	last VARCHAR(255), 
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`);
+*/
+
 try {
   const data = fs.readFileSync('passwrd.db', 'utf8');
   users = JSON.parse(data);
@@ -40,11 +55,23 @@ try {
   fs.writeFileSync('passwrd.db', JSON.stringify(users));
 }
 
-let notes = [];
+//let notes = [];
+const notesdb = new sqLite3.Database('notes.sqlite');
+
+notesdb.run(`CREATE TABLE IF NOT EXISTS notes(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	title VARCHAR(128),
+	note VARCHAR(1048),
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+`);
 
 const authenticate = (req) => {
+	console.log(req.headers)
   const authHeader = req.headers.authorization;
+  console.log(authHeader)
   if (!authHeader || !authHeader.startsWith("Basic ")) return false;
+  
   
   const base64Credentials = authHeader.slice(6);
   const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
@@ -68,6 +95,7 @@ const authenticate = (req) => {
 server.post('/api', (req, res, next) => {
   // Check for valid authentication. If missing/invalid, simply return a 401.
   const authUser = authenticate(req);
+  console.log(authUser)
   if (!authUser) {
     res.send(401, 'Unauthorized: Valid credentials are required to add a note');
     return next();
@@ -84,32 +112,43 @@ server.post('/api', (req, res, next) => {
   }
 
   console.log("Received POST body:", req.body);
-  if (!req.body || req.body.note === undefined) {
+  if (!req.body || (req.body.note === undefined || req.body.title === undefined)) {
     res.send(400, 'Bad Request: note is required');
     return next();
   }
 
   // If all checks pass, save the note.
-  notes.push(req.body.note);
-  res.send(201, { note: req.body.note });
+  let q = notesdb.prepare(
+	`INSERT INTO notes (title,note) VALUES(?,?);`
+  )
+  q.run(req.body.title, req.body.note)
+  
+  res.send(201, { title:req.body.title, note: req.body.note });
   return next();
 });
 
-  
-// GET 
-// - Retrieve notes.
+//Notes GET  
 server.get('/api', (req, res, next) => {
-  const index = req.query.index;
-  let result = notes;
-  if (index === undefined) {
-    res.send(200, result);
-  } else if (index >= 0 && index < notes.length) {
-    result = notes[index];
-    res.send(200, result);
-  } else {
-    res.send(404, '404: Not Found | No notes matching the search criteria');
-  }
-  return next();
+  const index = req.query.noteIndex;
+
+  notesdb.all("SELECT * FROM notes;", (err, notes) => {
+    if (err) {
+      res.send(500, "Internal Server Error");
+      return next();
+    }
+
+    console.log("Database GET Success: ", notes);
+
+    if (index === undefined) {
+      res.send(200, notes);
+    } else if (index >= 0 && index < notes.length) {
+      res.send(200, notes[index]);
+    } else {
+      res.send(404, '404: Not Found | No notes matching the search criteria');
+    }
+
+    return next();
+  });
 });
 
 // PUT /api - Edit a note (requires valid Basic Auth).
@@ -128,17 +167,41 @@ server.put('/api', (req, res, next) => {
     res.send(400, 'Bad Request: newNote is required');
     return next();
   }
-  const idx = Number(params.noteIndex);
-  if (isNaN(idx)) {
+  const index = Number(params.noteIndex);
+  if (isNaN(index)) {
     res.send(400, 'Bad Request: noteIndex must be a number');
     return next();
   }
-  if (idx < 0 || idx >= notes.length) {
-    res.send(404, 'Not Found: Note does not exist');
-    return next();
-  }
-  notes[idx] = params.newNote;
-  res.send(200, notes[idx]);
+  
+  	console.log("PUT request recieved")
+	//check if note exists?
+	let checkQuery = notesdb.prepare("SELECT * FROM notes WHERE id = ?");
+	let noteExists = checkQuery.run(index);
+	console.log("Note Exists ", noteExists)
+
+	if (!noteExists) {
+		res.send(404, '404: Not Found | Note does not exist in database');
+	} else {
+		
+		let putQuery = notesdb.prepare(
+			`UPDATE notes
+				SET title=?,note=?
+				WHERE id=?`);
+		
+		let title = ''
+		if (params.newTitle === undefined){
+			title = notesdb.prepare("SELECT title FROM notes WHERE id = ?")
+			title.run(index)
+		} else {
+			
+			title = params.newTitle
+		}
+		
+		putQuery.run(title, params.newNote, index)
+		console.log("PUT note ",title, params.newNote, index)
+		res.send(200, 'Note Changed');
+	}
+
   return next();
 });
 
@@ -160,12 +223,22 @@ server.del('/api', (req, res, next) => {
     res.send(400, 'Bad Request: noteIndex must be a number');
     return next();
   }
-  if (index < 0 || index >= notes.length) {
-    res.send(404, '404: Not Found | Note does not exist in database');
-  } else {
-    notes.splice(index, 1);
-    res.send(200, 'Note Deleted');
-  }
+	console.log("DEL request recieved")
+	//check if note exists?
+	let checkQuery = notesdb.prepare("SELECT * FROM notes WHERE id = ?");
+	let noteExists = checkQuery.run(index);
+	console.log("Note Exists ", noteExists)
+
+	if (!noteExists) {
+		res.send(404, '404: Not Found | Note does not exist in database');
+	} else {
+		
+		let deleteQuery = notesdb.prepare("DELETE FROM notes WHERE id = ?");
+		deleteQuery.run(index);
+		console.log("DEL note ", index )
+		res.send(200, 'Note Deleted');
+	}
+
   return next();
 });
 
@@ -246,7 +319,6 @@ server.del('/users/:username', (req, res, next) => {
     return next();
   }
   
-  
   if (authUser.username === targetUser) {
     res.send(403, 'Forbidden: Cannot delete your own account');
     return next();
@@ -276,7 +348,6 @@ server.get('/*', restify.plugins.serveStatic({
 server.get('/static/*', restify.plugins.serveStatic({
   directory: path.join(__dirname, '../html')
 }));
-  
   
 
 server.listen(3000, () => {

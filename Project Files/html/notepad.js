@@ -9,13 +9,18 @@ document.getElementById("saveNoteButton").addEventListener(
   () => {
 	const noteLength = notePad.getLength() //get our note length
 	const note = notePad.getSemanticHTML(0, noteLength) //tell our editor to get all text from 0 to our length
-	console.log(note)
-	console.log(noteLength)
-	console.log(JSON.stringify({note}))
+	const title = document.getElementById('noteTitle').value
+	
+	const authHeader = sessionStorage.getItem("authHeader")
+	console.log("Auth header from sessionStorage: ", authHeader)
 	
 	fetch('/api', {
 		method: 'POST',
-		body: JSON.stringify({ note })
+		headers: {
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+          },
+		body: JSON.stringify({ title, note })
 		
     })
   }
