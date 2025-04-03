@@ -12,6 +12,7 @@ const refreshNotes = () => {
 	.then(body =>body.json())
 	.then(note => {
 		
+		console.log(note)
 		const notesContainer = document.getElementById('noteContainer');
 		notesContainer.innerHTML = "" // make sure the html block is clear
 		note.forEach((n) => {
@@ -41,17 +42,9 @@ const refreshNotes = () => {
 			editButton.textContent = 'Edit';
 			editButton.id = n.id.toString() + '_edit'
 			editButton.onclick = () => {
-				// Edit the note (you can add more advanced editing functionality here)
-				const newTitle = prompt('Edit Title:', n.title);
-				const newNote = prompt('Edit your note:', n.note);
-				if (newNote !== null && newNote !== n) {
-					noteSection.innerHTML =`
-						<h3>${n.title}</h3>
-						<p><strong>Created:</strong> ${n.created}</p>
-						<p>${n.note}</p>
-					`
-				// Send AJAX request to update the note on the server
-				editNote(n.id, newTitle, newNote)}
+				
+				const redirectURL = `notepad_edit.html?noteIndex=${n.id.toString()}`;
+				window.location.href = redirectURL;
 			}
         
   
@@ -81,23 +74,5 @@ const deleteNote = (noteIndex) => {
 	.then(refreshNotes)
 	.catch(error => console.error('Error deleting note:', error));
   }
-  
-//PUT
-const editNote = (noteIndex, newTitle, newNote) => {
-	const authHeader = sessionStorage.getItem("authHeader");
-	console.log("Auth header from sessionStorage:", authHeader);
-	
-    fetch(`/api?noteIndex=${noteIndex}`, {
-        method: 'PUT',
-		headers: {
-		"Authorization": authHeader,
-		"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ noteIndex, newTitle, newNote }),
-		
-    }
-	
-	)
-    .then(refreshNotes)
-	.catch(error => console.error('Error edititng note:', error))
-}
+
+
