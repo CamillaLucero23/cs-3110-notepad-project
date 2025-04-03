@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html  lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="style.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+ 
+    <title>Note taking tool</title>
+</head>
+<body>
+	 <!-- Navigation bar -->
+    <nav class="navbar">
+        <ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="notepad.html">Notepad</a></li>
+			<li><a href="tips.html">Tips</a></li>
+			<li><a href="login.html">Login</a></li>
+			<li><a href="register.html">Register</a></li>
+		</ul>
+    </nav>
+	<p></p>
+    <div class="mainSection">
+		<textarea id="noteTitle" name="noteTitle" placeholder="Note Title"></textarea>
+		<p></p>
+		<div id="noteInput">
+		</div>
+		
+        <div class="ButtonsSelect">
+            <button class="button button4" id="saveNoteButton">Save Note</button>
+			<button class="button button4" id="goToNotes" >See Saved Notes</button>
+        </div>
+    
+    </div>
+	
+	<!-- Include the Quill library -->
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="notepad_edit.js"></script>
+</body>
+</html>

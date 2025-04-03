@@ -28,9 +28,3 @@ document.getElementById("saveNoteButton").addEventListener(
 document.getElementById("goToNotes").onclick = function () {
         location.href = "/notes.html";
     };
-document.getElementById("loginButton").onclick = function () {
-        location.href = "/login.html";
-    }
-document.getElementById("registerButton").onclick = function () {
-        location.href = "/register.html";
-    }

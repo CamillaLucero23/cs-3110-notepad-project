@@ -33,8 +33,8 @@ const hash = (str) => createHmac("sha256", secret).update(str).digest('hex');
 
 let users = {};
 const usersdb = new sqLite3.Database('users.sqlite3');
-/*
-usersdb.run(`CREATE TABLE users(
+
+usersdb.run(`CREATE TABLE IF NOT EXISTS users(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	username VARCHAR(256),
 	password VARCHAR(256),
@@ -44,7 +44,7 @@ usersdb.run(`CREATE TABLE users(
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 `);
-*/
+
 
 try {
   const data = fs.readFileSync('passwrd.db', 'utf8');
@@ -95,7 +95,7 @@ const authenticate = (req) => {
 server.post('/api', (req, res, next) => {
   // Check for valid authentication. If missing/invalid, simply return a 401.
   const authUser = authenticate(req);
-  console.log(authUser)
+
   if (!authUser) {
     res.send(401, 'Unauthorized: Valid credentials are required to add a note');
     return next();
@@ -129,27 +129,42 @@ server.post('/api', (req, res, next) => {
 
 //Notes GET  
 server.get('/api', (req, res, next) => {
-  const index = req.query.noteIndex;
+	const index = parseInt(req.query.noteIndex);
+	
+    if (isNaN(index)) {
+		console.log("GET request received");
+		notesdb.all(`SELECT * FROM notes;`, (err, notes) => {
+			if (err) {
+				console.log("Error Grabbing Notes", err)
+				res.send(500, "Internal Server Error");
 
-  notesdb.all("SELECT * FROM notes;", (err, notes) => {
-    if (err) {
-      res.send(500, "Internal Server Error");
-      return next();
-    }
+			}else {
+				console.log("Grabbed All Notes - ", notes);
+			
+				res.send(200, notes);
+			}
+			return next();
+		});
+		
+    } else if (index >= 0) {
+		console.log("GET received with given index = ",index);
+		notesdb.get(`SELECT * FROM notes WHERE id=?;`, index ,(err, note) => {
+			if (err) {
+				console.log("Error Grabbing Notes", err);
+				res.send(500, "Internal Server Error");
 
-    console.log("Database GET Success: ", notes);
-
-    if (index === undefined) {
-      res.send(200, notes);
-    } else if (index >= 0 && index < notes.length) {
-      res.send(200, notes[index]);
-    } else {
-      res.send(404, '404: Not Found | No notes matching the search criteria');
-    }
-
-    return next();
-  });
-});
+			}else {
+				console.log("Grabbed Note - ", note);
+				if (note === undefined){
+					res.send(404, "404: Not Found | Invalid Request");
+				}else {
+					res.send(200, note);
+				}
+			}
+			return next();
+		});
+	}
+})
 
 // PUT /api - Edit a note (requires valid Basic Auth).
 server.put('/api', (req, res, next) => {
@@ -175,7 +190,7 @@ server.put('/api', (req, res, next) => {
   
   	console.log("PUT request recieved")
 	//check if note exists?
-	let checkQuery = notesdb.prepare("SELECT * FROM notes WHERE id = ?");
+	let checkQuery = notesdb.prepare("SELECT * FROM notes WHERE id=?");
 	let noteExists = checkQuery.run(index);
 	console.log("Note Exists ", noteExists)
 
@@ -190,7 +205,7 @@ server.put('/api', (req, res, next) => {
 		
 		let title = ''
 		if (params.newTitle === undefined){
-			title = notesdb.prepare("SELECT title FROM notes WHERE id = ?")
+			title = notesdb.prepare("SELECT title FROM notes WHERE id=?")
 			title.run(index)
 		} else {
 			
