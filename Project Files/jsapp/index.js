@@ -59,12 +59,13 @@ try {
 const notesdb = new sqLite3.Database('notes.sqlite3');
 
 notesdb.run(`CREATE TABLE IF NOT EXISTS notes(
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	title VARCHAR(128),
-	note VARCHAR(1048),
-	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-`);
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title VARCHAR(128),
+  note VARCHAR(1048),
+  username VARCHAR(256), -- Who created the note
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`);
+
 
 const authenticate = (req) => {
 	console.log(req.headers)
@@ -119,9 +120,10 @@ server.post('/api', (req, res, next) => {
 
   // If all checks pass, save the note.
   let q = notesdb.prepare(
-	`INSERT INTO notes (title,note) VALUES(?,?);`
-  )
-  q.run(req.body.title, req.body.note)
+    `INSERT INTO notes (title, note, username) VALUES (?, ?, ?);`
+  );
+  q.run(req.body.title, req.body.note, authUser.username);
+  
   
   res.send(201, { title:req.body.title, note: req.body.note });
   return next();
@@ -173,6 +175,23 @@ server.put('/api', (req, res, next) => {
     res.send(401, 'Unauthorized: Invalid credentials');
     return next();
   }
+  let query = `SELECT * FROM notes WHERE username = ?;`;
+
+  // If you want admins to see all notes, you could add:
+  if(authUser.role === 'admin'){
+      query = `SELECT * FROM notes;`;
+  }
+  
+  notesdb.all(query, authUser.role === 'admin' ? [] : [authUser.username], (err, notes) => {
+      if (err) {
+          res.send(500, "Internal Server Error");
+      } else {
+          res.send(200, notes);
+      }
+      return next();
+  });
+
+
   const params = req.body;
   if (params.noteIndex === undefined) {
     res.send(400, 'Bad Request: noteIndex is required');
