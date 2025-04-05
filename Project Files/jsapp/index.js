@@ -131,42 +131,53 @@ server.post('/api', (req, res, next) => {
 
 //Notes GET  
 server.get('/api', (req, res, next) => {
-	const index = parseInt(req.query.noteIndex);
-	
-    if (isNaN(index)) {
-		console.log("GET request received");
-		notesdb.all(`SELECT * FROM notes;`, (err, notes) => {
-			if (err) {
-				console.log("Error Grabbing Notes", err)
-				res.send(500, "Internal Server Error");
+  // First, authenticate the request
+  const authUser = authenticate(req);
+  if (!authUser) {
+    res.send(401, 'Unauthorized: Please log in');
+    return next();
+  }
+  console.log("Authenticated user:", authUser);
+  console.log("Query:", query, "Params:", params);
 
-			}else {
-				console.log("Grabbed All Notes - ", notes);
-			
-				res.send(200, notes);
-			}
-			return next();
-		});
-		
-    } else if (index >= 0) {
-		console.log("GET received with given index = ",index);
-		notesdb.get(`SELECT * FROM notes WHERE id=?;`, index ,(err, note) => {
-			if (err) {
-				console.log("Error Grabbing Notes", err);
-				res.send(500, "Internal Server Error");
-
-			}else {
-				console.log("Grabbed Note - ", note);
-				if (note === undefined){
-					res.send(404, "404: Not Found | Invalid Request");
-				}else {
-					res.send(200, note);
-				}
-			}
-			return next();
-		});
-	}
-})
+  // Check if a specific note is requested by index (via query parameter noteIndex)
+  const index = parseInt(req.query.noteIndex);
+  if (!isNaN(index)) {
+    // If a specific note is requested, fetch it and verify it belongs to the user
+    notesdb.get(`SELECT * FROM notes WHERE id=?;`, [index], (err, note) => {
+      if (err) {
+        console.log("Error grabbing note", err);
+        res.send(500, "Internal Server Error");
+      } else if (!note || (note.username !== authUser.username && authUser.role !== 'admin')) {
+        res.send(404, "Not Found or Unauthorized");
+      } else {
+        res.send(200, note);
+      }
+      return next();
+    });
+  } else {
+    // If no specific note is requested, retrieve all notes for the user.
+    // Admins can see all notes.
+    let query, params;
+    if (authUser.role === 'admin') {
+      query = `SELECT * FROM notes;`;
+      params = [];
+    } else {
+      query = `SELECT * FROM notes WHERE username = ?;`;
+      params = [authUser.username];
+    }
+    notesdb.all(query, params, (err, notes) => {
+      if (err) {
+        console.log("Error grabbing notes", err);
+        res.send(500, "Internal Server Error");
+      } else {
+        console.log("Grabbed Notes - ", notes);
+        res.send(200, notes);
+      }
+      return next();
+    });
+  }
+});
 
 // PUT /api - Edit a note (requires valid Basic Auth).
 server.put('/api', (req, res, next) => {
