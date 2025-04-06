@@ -138,7 +138,7 @@ server.get('/api', (req, res, next) => {
     return next();
   }
   console.log("Authenticated user:", authUser);
-  console.log("Query:", query, "Params:", params);
+  //console.log("Query:", query, "Params:", params);
 
   // Check if a specific note is requested by index (via query parameter noteIndex)
   const index = parseInt(req.query.noteIndex);
@@ -186,21 +186,6 @@ server.put('/api', (req, res, next) => {
     res.send(401, 'Unauthorized: Invalid credentials');
     return next();
   }
-  let query = `SELECT * FROM notes WHERE username = ?;`;
-
-  // If you want admins to see all notes, you could add:
-  if(authUser.role === 'admin'){
-      query = `SELECT * FROM notes;`;
-  }
-  
-  notesdb.all(query, authUser.role === 'admin' ? [] : [authUser.username], (err, notes) => {
-      if (err) {
-          res.send(500, "Internal Server Error");
-      } else {
-          res.send(200, notes);
-      }
-      return next();
-  });
 
 
   const params = req.body;
