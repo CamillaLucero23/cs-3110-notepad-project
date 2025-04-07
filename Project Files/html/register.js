@@ -6,16 +6,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const role = sessionStorage.getItem("role");
   const adminInfo = document.getElementById("adminInfo");
   const usersListContainer = document.getElementById("usersList");
+  const roleSelect = document.getElementById("role");
 
-  // Check that the admin is logged in.
-  if (!authHeader || role !== "admin") {
-    alert("You must be logged in as an admin to register new users.");
-    window.location.href = "login.html";
-    return;
-  } else {
+  // Check if the user is an admin.
+  if (authHeader && role === "admin") {
     const username = sessionStorage.getItem("username");
     if (adminInfo) {
       adminInfo.textContent = "Logged in as admin: " + username;
+    }
+  } else {
+    // Not admin: allow registration but force role to 'author'
+    if (roleSelect) {
+      roleSelect.value = "author";
+      roleSelect.disabled = true; // Prevent non-admin from selecting 'admin'
+    }
+    if (adminInfo) {
+      adminInfo.textContent = "Registering as author (admin privileges required for admin accounts)";
     }
   }
 
@@ -34,7 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            // Only include the auth header if an admin is logged in.
+            ...(authHeader && role === "admin" ? { "Authorization": authHeader } : {})
           },
           body: JSON.stringify({
             newUsername,
@@ -67,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/users", {
         method: "GET",
         headers: {
-          "Authorization": authHeader
+          "Authorization": authHeader || ""
         }
       });
       console.log("GET /users response status:", response.status);
