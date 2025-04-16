@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('node:fs');
 const sqLite3 = require('sqlite3');
 const { createHmac } = require('node:crypto');
-console.log('path module loaded:', path);
+
 
 // Create the server instance.
 const server = restify.createServer();
@@ -22,7 +22,7 @@ server.pre((req, res, next) => {
   next();
 });
 
-server.opts('*', (req, res, next) => {
+server.opts('*', (req, res, next) =>  {
   res.send(200);
   return next();
 });

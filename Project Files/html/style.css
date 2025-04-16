@@ -56,9 +56,9 @@ body{
 }
 
 #noteTitle {
-	font-size:40pxpx;
+	font-size:25px;
 	width: 50%;
-	max-height: 50px;
+	max-height: 25px;
 	resize: none;
 }
 
@@ -119,9 +119,6 @@ body{
     
 }
 
-#noteContainer 
-
-
 .videoEmbed{
     display: flex;
     flex-direction: column;
@@ -162,7 +159,6 @@ body{
 }
 
 .button4 {
-	position:center;
 	background-color: var(--teal);
 	text-align: center;
 	color: var(--primary_white);
