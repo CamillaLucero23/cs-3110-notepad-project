@@ -67,43 +67,5 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Registration form not found.");
   }
-
-  // Function to load and display users.
-  async function loadUsers() {
-    try {
-      const response = await fetch("/users", {
-        method: "GET",
-        headers: {
-          "Authorization": authHeader || ""
-        }
-      });
-      console.log("GET /users response status:", response.status);
-      if (!response.ok) {
-        throw new Error("Failed to load users");
-      }
-      const users = await response.json();
-      console.log("Users loaded:", users);
-
-      // Clear any existing content.
-      usersListContainer.innerHTML = "";
-
-      // Loop through each user and add them to the container.
-      users.forEach(user => {
-        const userDiv = document.createElement("div");
-        userDiv.classList.add("user-entry");
-        userDiv.innerHTML = `
-          <strong>Username:</strong> ${user.username} <br>
-          <strong>Role:</strong> ${user.role} <br>
-          <strong>Comments:</strong> ${user.comments || ""}
-        `;
-        usersListContainer.appendChild(userDiv);
-      });
-    } catch (error) {
-      console.error("Error loading users:", error);
-      usersListContainer.innerText = "Error loading users: " + error.message;
-    }
-  }
   
-  // Load users once the page is loaded.
-  loadUsers();
 });
