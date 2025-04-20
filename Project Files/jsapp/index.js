@@ -6,7 +6,6 @@ const fs = require('node:fs');
 const sqLite3 = require('sqlite3');
 const { createHmac } = require('node:crypto');
 
-
 // Create the server instance.
 const server = restify.createServer();
 
@@ -22,7 +21,7 @@ server.pre((req, res, next) => {
   next();
 });
 
-server.opts('*', (req, res, next) =>  {
+server.opts('*', (req, res, next) => {
   res.send(200);
   return next();
 });
@@ -68,18 +67,12 @@ notesdb.run(`CREATE TABLE IF NOT EXISTS notes(
 
 // Asynchronous authenticate function using the users database.
 const authenticate = (req, callback) => {
-  console.log(req.headers);
   const authHeader = req.headers.authorization;
-  console.log(authHeader);
   if (!authHeader || !authHeader.startsWith("Basic ")) return callback(false);
   
   const base64Credentials = authHeader.slice(6);
   const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
   const [username, password] = credentials.split(':');
-  
-  console.log("Attempting login for:", username);
-  console.log("Provided password:", password);
-  console.log("Hashed provided password:", hash(password));
   
   // Query the database for the user.
   usersdb.get("SELECT * FROM users WHERE username = ?", [username], (err, userRow) => {
@@ -110,7 +103,6 @@ server.post('/api', (req, res, next) => {
         return next();
       }
     }
-    console.log("Received POST body:", req.body);
     if (!req.body || (req.body.note === undefined || req.body.title === undefined)) {
       res.send(400, 'Bad Request: note is required');
       return next();
@@ -122,23 +114,24 @@ server.post('/api', (req, res, next) => {
   });
 });
 
-// GET /api - Retrieve notes.
+// GET /api - Retrieve notes
 server.get('/api', (req, res, next) => {
   authenticate(req, (authUser) => {
     if (!authUser) {
       res.send(401, 'Unauthorized: Please log in');
       return next();
     }
-    console.log("Authenticated user:", authUser);
+
     const index = parseInt(req.query.noteIndex);
     if (!isNaN(index)) {
       notesdb.get(`SELECT * FROM notes WHERE id=?;`, [index], (err, note) => {
         if (err) {
-          console.log("Error grabbing note", err);
           res.send(500, "Internal Server Error");
         } else if (!note || (note.username !== authUser.username && authUser.role !== 'admin')) {
           res.send(404, "Not Found or Unauthorized");
         } else {
+          // Add the username as the author
+          note.author = note.username;
           res.send(200, note);
         }
         return next();
@@ -154,10 +147,12 @@ server.get('/api', (req, res, next) => {
       }
       notesdb.all(query, params, (err, notes) => {
         if (err) {
-          console.log("Error grabbing notes", err);
           res.send(500, "Internal Server Error");
         } else {
-          console.log("Grabbed Notes - ", notes);
+          // Loop through the notes and add the username as the author for each
+          notes.forEach(note => {
+            note.author = note.username;  // Add the username as author
+          });
           res.send(200, notes);
         }
         return next();
@@ -188,10 +183,8 @@ server.put('/api', (req, res, next) => {
       return next();
     }
     
-    console.log("PUT request received");
     let checkQuery = notesdb.prepare("SELECT * FROM notes WHERE id=?");
     let noteExists = checkQuery.run(index);
-    console.log("Note Exists ", noteExists);
     
     if (!noteExists) {
       res.send(404, '404: Not Found | Note does not exist in database');
@@ -208,7 +201,6 @@ server.put('/api', (req, res, next) => {
         if (err) {
           res.send(500, "Internal Server Error");
         } else {
-          console.log("PUT note", title, params.newNote, index);
           res.send(200, 'Note Changed');
         }
         return next();
@@ -225,7 +217,6 @@ server.del('/api', (req, res, next) => {
       return next();
     }
     const noteIndex = req.query.noteIndex;
-    console.log("Delete request for note index:", noteIndex);
     if (noteIndex === undefined) {
       res.send(400, 'Bad Request: noteIndex not provided');
       return next();
@@ -235,10 +226,8 @@ server.del('/api', (req, res, next) => {
       res.send(400, 'Bad Request: noteIndex must be a number');
       return next();
     }
-    console.log("DEL request received");
     let checkQuery = notesdb.prepare("SELECT * FROM notes WHERE id = ?");
     let noteExists = checkQuery.run(index);
-    console.log("Note Exists ", noteExists);
     
     if (!noteExists) {
       res.send(404, '404: Not Found | Note does not exist in database');
@@ -249,7 +238,6 @@ server.del('/api', (req, res, next) => {
         if (err) {
           res.send(500, "Internal Server Error");
         } else {
-          console.log("DEL note", index);
           res.send(200, 'Note Deleted');
         }
         return next();
@@ -280,7 +268,6 @@ server.post('/register', (req, res, next) => {
       proceedWithRegistration();
     });
   } else {
-    // For 'author' accounts, no authentication is required.
     proceedWithRegistration();
   }
   
@@ -297,7 +284,6 @@ server.post('/register', (req, res, next) => {
       const insertStmt = `INSERT INTO users (username, password, role, comments) VALUES (?, ?, ?, ?)`;
       usersdb.run(insertStmt, [newUsername, hash(newPassword), role, comments || ''], function(err) {
         if (err) {
-          console.error("Error inserting new user:", err);
           res.send(500, "Internal Server Error: Could not save new user");
         } else {
           res.send(201, `User ${newUsername} created successfully`);
@@ -319,68 +305,6 @@ server.get('/login', (req, res, next) => {
     return next();
   });
 });
-
-// GET /users - List users (admin only).
-server.get('/users', (req, res, next) => {
-  authenticate(req, (authUser) => {
-    if (!authUser || authUser.role !== 'admin') {
-      res.send(401, 'Unauthorized');
-      return next();
-    }
-    let usersList = [];
-    for (const [username, info] of Object.entries(users)) {
-      usersList.push({
-        username,
-        role: info.role,
-        comments: info.comments
-      });
-    }
-    res.send(200, usersList);
-    return next();
-  });
-});
-
-// DELETE /users/:username - Delete a user (admin only).
-server.del('/users/:username', (req, res, next) => {
-  authenticate(req, (authUser) => {
-    if (!authUser || authUser.role !== 'admin') {
-      res.send(401, 'Unauthorized');
-      return next();
-    }
-    const targetUser = req.params.username;
-    if (!users[targetUser]) {
-      res.send(404, 'User not found');
-      return next();
-    }
-    if (authUser.username === targetUser) {
-      res.send(403, 'Forbidden: Cannot delete your own account');
-      return next();
-    }
-    delete users[targetUser];
-    fs.writeFile('passwrd.db', JSON.stringify(users), (err) => {
-      if (err) {
-        res.send(500, 'Internal Server Error: Could not update user list');
-        return next();
-      }
-      res.send(200, 'User deleted successfully');
-      return next();
-    });
-  });
-});
-
-// Serve static files.
-server.get('/', restify.plugins.serveStatic({
-  directory: path.join(__dirname, '../html'),
-  default: 'login.html'
-}));
-
-server.get('/*', restify.plugins.serveStatic({
-  directory: path.join(__dirname, '../html')
-}));
-
-server.get('/static/*', restify.plugins.serveStatic({
-  directory: path.join(__dirname, '../html')
-}));
 
 server.listen(3000, () => {
   console.log('Server listening on port 3000');

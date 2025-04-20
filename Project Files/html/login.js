@@ -1,47 +1,52 @@
 document.getElementById("loginForm").addEventListener("submit", async (event) => {
-    event.preventDefault(); // Prevent form from doing a default page refresh
-    
-    // Collect the credentials from the form inputs
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    console.log("Username from form:", username);
-    console.log("Password from form:", password);
-    
-    // Create the Basic Auth header. btoa() encodes the credentials in base64.
-    const authHeader = "Basic " + btoa(username + ":" + password);
-    
-    try {
-      // Send a request to a dedicated /login endpoint (see server code explanation below)
+  event.preventDefault();  // Prevent form from doing a default page refresh
+  
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  
+  const authHeader = "Basic " + btoa(username + ":" + password);
+  
+  try {
       const response = await fetch("/login", {
-        method: "GET",
-        headers: {
-          "Authorization": authHeader
-        }
+          method: "GET",
+          headers: {
+              "Authorization": authHeader
+          }
       });
-        console.log("Response status:", response.status);
+      
       if (response.ok) {
-        const data = await response.json();
-		console.log(data)
-        sessionStorage.setItem("username", data.username);
-        sessionStorage.setItem("role", data.role);
-        sessionStorage.setItem("authHeader", authHeader);
-        console.log("Stored username:", sessionStorage.getItem("username"));
-        console.log("Stored role:", sessionStorage.getItem("role"));
-        console.log("Stored authHeader:", sessionStorage.getItem("authHeader"));
-        alert("Login successful. Welcome " + data.username + "!");
-        window.location.href = "register.html"; // Redirect after successful login.
+          const data = await response.json();
+          
+          // Store the session data
+          sessionStorage.setItem("username", data.username);
+          sessionStorage.setItem("role", data.role);
+          sessionStorage.setItem("authHeader", authHeader);
+          
+          // Log sessionStorage to confirm it's being set correctly
+          console.log("Session Storage set:", sessionStorage);
 
+          // Redirect to the homepage after successful login
+          window.location.href = "index.html";  // Redirect to homepage (index.html)
       } else {
-        alert("Login failed. Please check your credentials.");
+          alert("Login failed. Please check your credentials.");
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Error during login:", error);
       alert("An error occurred during login.");
-    }
-  });
+  }
+});
 
-  document.getElementById("logoutButton").addEventListener("click", () => {
-    sessionStorage.clear();
-    window.location.href = "login.html"; // Redirect after logout.
-  })
-  
+document.getElementById("logoutButton").addEventListener("click", () => {
+  // Clear session storage to log out
+  console.log("Before logout:", sessionStorage);
+  sessionStorage.clear();
+  console.log("After logout:", sessionStorage);
+
+
+  // Optionally, you can log this for debugging purposes
+  console.log("Session cleared and logged out");
+
+  // Redirect to login page
+  window.location.href = "login.html";  // Redirect to the login page
+});
+

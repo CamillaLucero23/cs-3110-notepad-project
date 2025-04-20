@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="style.css" rel="stylesheet">
+    <title>Homepage</title>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="homepage.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+
+    <!-- Welcome Section -->
+    <div class="container">
+        <div class="mainSection">
+            <h1>Welcome to the Note Taking Tool</h1>
+            <p>To use this tool, you must log in or register.</p>
+            <div class="button-container">
+                <button class="button button4" onclick="window.location.href='login.html'">Login</button>
+                <button class="button button4" onclick="window.location.href='register.html'">Register</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Redirect logged-in users to the notes page (or another page) instead of the homepage
+        const authHeader = sessionStorage.getItem("authHeader");
+        if (authHeader) {
+            window.location.href = "index.html";  // or any other page where logged-in users should land
+        }
+    </script>
+</body>
+</html>

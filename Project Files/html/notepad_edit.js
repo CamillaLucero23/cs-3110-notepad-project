@@ -1,3 +1,11 @@
+// Check if user is logged in by verifying if the auth header exists
+const authHeader = sessionStorage.getItem("authHeader");
+
+if (!authHeader) {
+    window.location.href = "login.html";
+}
+
+
 const toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
   ['blockquote', 'code-block'],
