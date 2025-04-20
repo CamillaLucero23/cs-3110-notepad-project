@@ -257,6 +257,52 @@ server.post('/register', (req, res, next) => {
     res.send(400, 'Bad Request: role must be either "admin" or "author"');
     return next();
   }
+
+  // POST /api/share - Share a note with another user (creating a copy of the note)
+server.post('/api/share', (req, res, next) => {
+  authenticate(req, (authUser) => {
+    if (!authUser) {
+      res.send(401, 'Unauthorized: Valid credentials are required to share a note');
+      return next();
+    }
+
+    const { noteId, username } = req.body;
+
+    // Validate inputs
+    if (!noteId || !username) {
+      res.send(400, 'Bad Request: noteId and username are required');
+      return next();
+    }
+
+    // Check if the user exists
+    usersdb.get("SELECT * FROM users WHERE username = ?", [username], (err, userRow) => {
+      if (err || !userRow) {
+        res.send(404, 'User not found');
+        return next();
+      }
+
+      // Get the note to share
+      notesdb.get("SELECT * FROM notes WHERE id = ?", [noteId], (err, noteRow) => {
+        if (err || !noteRow) {
+          res.send(404, 'Note not found');
+          return next();
+        }
+
+        // Create a new note with the same content, but for the target user
+        const newNoteQuery = `INSERT INTO notes (title, note, username) VALUES (?, ?, ?)`;
+        notesdb.run(newNoteQuery, [noteRow.title, noteRow.note, username], function (err) {
+          if (err) {
+            res.send(500, "Internal Server Error: Could not share the note");
+            return next();
+          }
+          res.send(201, { success: true, message: 'Note shared successfully!' });
+          return next();
+        });
+      });
+    });
+  });
+});
+
   
   // If the requested role is 'admin', verify that the requester is an admin.
   if (role === 'admin') {

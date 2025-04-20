@@ -6,7 +6,7 @@
     <title>Homepage</title>
 </head>
 <body>
-    <!-- Navigation bar -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <ul>
             <li><a href="homepage.html">Home</a></li>
@@ -15,17 +15,47 @@
         </ul>
     </nav>
 
-    <!-- Welcome Section -->
-    <div class="container">
-        <div class="mainSection">
-            <h1>Welcome to the Note Taking Tool</h1>
-            <p>To use this tool, you must log in or register.</p>
-            <div class="button-container">
-                <button class="button button4" onclick="window.location.href='login.html'">Login</button>
-                <button class="button button4" onclick="window.location.href='register.html'">Register</button>
-            </div>
+    <!-- Main Section -->
+    <section class="mainSection">
+        <h1 class="titleName">Welcome to the Ultimate Note-Taking Tool</h1>
+        <p class="titlePara">Capture your thoughts, ideas, and tasks in one place. Stay organized and secure with our note-taking tool.</p>
+
+        <div class="ButtonsSelect">
+            <button class="button4" onclick="window.location.href='login.html'">Login</button>
+            <button class="button4" onclick="window.location.href='register.html'">Register</button>
         </div>
-    </div>
+    </section>
+
+    <section class="mainSection">
+        <h2>Why Choose Our Tool?</h2>
+        <p>Our note-taking app helps you capture your thoughts, ideas, and tasks in one place. Whether you're a student, professional, or someone who loves to stay organized, our app is the perfect companion.</p>
+        <ul>
+            <li>Easy to use interface</li>
+            <li>Secure and private</li>
+            <li>Access your notes from anywhere</li>
+            <li>Sync across all devices</li>
+        </ul>
+
+        <h2>Key Features</h2>
+        <div>
+            <h3>Note Organization</h3>
+            <p>Organize your notes by category, tags, or date for easy access.</p>
+        </div>
+        <div>
+            <h3>Real-time Syncing</h3>
+            <p>Your notes sync across all your devices seamlessly.</p>
+        </div>
+        <div>
+            <h3>Secure and Private</h3>
+            <p>Your data is protected with encryption, ensuring your notes are always secure.</p>
+        </div>
+    </section>
+
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Note Taking Tool. All rights reserved.</p>
+    </footer>
 
     <script>
         // Redirect logged-in users to the notes page (or another page) instead of the homepage

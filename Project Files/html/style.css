@@ -116,6 +116,8 @@ body{
     padding: 10px;
     font: 100% arial, sans-serif;
     font-size: 1.3em;
+    border: #333 solid 1px;
+    border-radius: 10px;
     
 }
 
@@ -173,3 +175,4 @@ body{
 	background-color: var(--shaded_teal);
 	color: var(--shaded_white);
 }
+
