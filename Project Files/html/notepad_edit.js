@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
 	// If authHeader doesn't exist, redirect to login page
 	if (!authHeader) {
-	  window.location.href = "login.html"; // Redirect to login page if not logged in
+	  window.location.href = "page_login.html"; // Redirect to login page if not logged in
 	}
   
 	// If logged in, allow access to the page
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const authHeader = sessionStorage.getItem("authHeader");
 
 if (!authHeader) {
-    window.location.href = "login.html";
+    window.location.href = "page_login.html";
 }
 
 
@@ -103,5 +103,4 @@ const editNote = (noteIndex, newTitle, newNote) => {
 		body: JSON.stringify({ noteIndex, newTitle, newNote }),
     })
 	.catch(error => console.error('Error edititng note:', error))
-
 }

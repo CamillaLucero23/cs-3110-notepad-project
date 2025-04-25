@@ -47,6 +47,6 @@ document.getElementById("logoutButton").addEventListener("click", () => {
   console.log("Session cleared and logged out");
 
   // Redirect to login page
-  window.location.href = "login.html";  // Redirect to the login page
+  window.location.href = "page_login.html";  // Redirect to the login page
 });
 

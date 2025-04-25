@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // If authHeader doesn't exist, redirect to login page
   if (!authHeader) {
-    window.location.href = "login.html"; // Redirect to login page if not logged in
+    window.location.href = "page_login.html"; // Redirect to login page if not logged in
   }
 
   // If logged in, allow access to the page
@@ -46,7 +46,10 @@ document.getElementById("saveNoteButton").addEventListener(
   () => {
 	const noteLength = notePad.getLength() //get our note length
 	const note = notePad.root.innerHTML //tell our editor to get all text from 0 to our length
-	const title = document.getElementById('noteTitle').value
+	let title = document.getElementById('noteTitle').value
+	if (!title || title.length === 0){
+		title = 'Note';
+	}
 	
 	const authHeader = sessionStorage.getItem("authHeader")
 	console.log("Auth header from sessionStorage: ", authHeader)
@@ -60,6 +63,7 @@ document.getElementById("saveNoteButton").addEventListener(
 		body: JSON.stringify({ title, note })
 		
     })
+	.then(() => {location.href = "/notes.html";})
   }
 )
 

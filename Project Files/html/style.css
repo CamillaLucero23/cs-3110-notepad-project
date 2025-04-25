@@ -4,15 +4,15 @@
 	--secondary_white: #F5ECD5;
 	--shaded_white:#cfc6b0;
 	--teal: #578E7E;
-	--shaded_teal: #456e62;
+	--dark_teal: #144033;
 	--black: #3D3D3D;
 }
 
 
 body{
-    background-color: var(--teal);
+    background-image: linear-gradient(to right, var(--teal),var(--dark_teal));
+	background-color:var(--teal);
 	font: 100% arial, sans-serif;
-    
 }
 
 .navbar {
@@ -37,7 +37,6 @@ body{
 
 
 .navbar li a {
-
     color: var(--black);
     text-align: center;
     padding: 14px 16px;
@@ -52,7 +51,7 @@ body{
     width: 99%;
     height: 250px;
 	background:white;
-
+	margin:10px;
 }
 
 #noteTitle {
@@ -63,6 +62,7 @@ body{
 }
 
 .mainSection{
+	color: var(--black);
     background-color:var(--primary_white);
     border: 5px solid var(--secondary_white) ;
     border-radius: 25px;
@@ -103,6 +103,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
+	align-items:center;
     margin-top: 10px;
     border: 5px solid var(--secondary_white) ;
     border-radius: 25px;
@@ -111,14 +112,24 @@ body{
 }
 
 #noteContainer {
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     color: var(--black);
     padding: 10px;
     font: 100% arial, sans-serif;
-    font-size: 1.3em;
-    border: #333 solid 1px;
-    border-radius: 10px;
-    
+    font-size: 1.3em;  
+}
+
+.note{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+	align-items: center;
+	border-radius: 25px;
+	background-color:var(--secondary_white);
+	height:275px;
+	width:1000px;
 }
 
 .videoEmbed{
@@ -161,18 +172,21 @@ body{
 }
 
 .button4 {
-	background-color: var(--teal);
-	text-align: center;
+    background-image: linear-gradient(var(--teal),var(--dark_teal));
+	background-color:var(--teal);
 	color: var(--primary_white);
+	text-align: center;
 	border:1px solid var(--shaded_white);
     border-radius:10px;
     box-shadow: 0px 0px 2px 2px var(--shaded_white);
+	margin-left: 10px;
 	width: 200px; 
 	height: 25px;
 }
 
 .button4:hover{
-	background-color: var(--shaded_teal);
 	color: var(--shaded_white);
 }
+
+
 
