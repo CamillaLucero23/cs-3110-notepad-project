@@ -52,7 +52,7 @@ const refreshQuickNotes = () => {
 				deleteButton.id = n.id.toString() + '_del';
 				deleteButton.onclick = () => {
 					quickNoteSection.remove();
-					deleteNote(n.id);
+					deleteQuickNote(n.id);
 				};
 
 				const editButton = document.createElement('button');
@@ -60,7 +60,7 @@ const refreshQuickNotes = () => {
 				editButton.textContent = 'Edit';
 				editButton.id = n.id.toString() + '_edit';
 				editButton.onclick = () => {
-					const redirectURL = `notepad_edit.html?quickNoteIndex=${n.id.toString()}`;
+					const redirectURL = `notepad_edit.html?noteIndex=${n.id.toString()}`;
 					window.location.href = redirectURL;
 				};
 				
@@ -76,10 +76,10 @@ const refreshQuickNotes = () => {
 }
 
 //DEL
-const deleteQuickNote = (quickNoteIndex) => {
+const deleteQuickNote = (noteIndex) => {
 	const authHeader = sessionStorage.getItem("authHeader");
 	console.log("Auth header from sessionStorage:", authHeader);
-	fetch(`/api?noteIndex=${quickNoteIndex}`, {
+	fetch(`/api?noteIndex=${noteIndex}`, {
 	  method: 'DELETE',
 	  headers: {
 		"Authorization": authHeader,
