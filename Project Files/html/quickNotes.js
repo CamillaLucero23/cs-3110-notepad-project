@@ -51,7 +51,7 @@ const refreshQuickNotes = () => {
 				deleteButton.textContent = 'Delete';
 				deleteButton.id = n.id.toString() + '_del';
 				deleteButton.onclick = () => {
-					noteSection.remove();
+					quickNoteSection.remove();
 					deleteNote(n.id);
 				};
 
